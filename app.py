@@ -17,7 +17,7 @@ load_figure_template('LUX')
 
 server = app.server
 
-df = pd.read_csv("pollution_us_2000_2016.csv")
+df = pd.read_csv("pollution_new.csv")
 df.drop(df.loc[df['State Code'] == 11].index, inplace=True)
 df.drop(df.loc[df['State Code'] == 80].index, inplace=True)
 
