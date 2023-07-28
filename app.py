@@ -14,6 +14,7 @@ from dash_bootstrap_templates import load_figure_template
 
 app = Dash(__name__, external_stylesheets=[dbc.themes.LUX])
 load_figure_template('LUX')
+server = app.server
 
 df = pd.read_csv("pollution_new.csv")
 df.drop(df.loc[df['State Code'] == 11].index, inplace=True)
