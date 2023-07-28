@@ -15,8 +15,6 @@ from dash_bootstrap_templates import load_figure_template
 app = Dash(__name__, external_stylesheets=[dbc.themes.LUX])
 load_figure_template('LUX')
 
-server = app.server
-
 df = pd.read_csv("pollution_new.csv")
 df.drop(df.loc[df['State Code'] == 11].index, inplace=True)
 df.drop(df.loc[df['State Code'] == 80].index, inplace=True)
@@ -165,7 +163,9 @@ app.layout = html.Div([
             dcc.Graph(figure = {}, id = 'scatter1'),
             html.Div([dcc.Markdown('''
                     #### Scatterplot of mean AQI for a given day in the United States
-                    This scatterplot shows daily fluctuations in air quality index averaged across the entire United States for any given day. These values were all compiled and plotted into this scatterplot for 2000 to 2016 with a Y axis of air quality index for the specific pollutant selected from the radio buttons.
+                    This scatterplot shows daily fluctuations in air quality index averaged across the entire United States for any given day. These values were all compiled and plotted into this scatterplot for 2000 to 2016 with a Y axis of air quality index for the specific pollutant selected from the radio buttons.  
+                      
+                    From these visualizations we were able to draw some interesting and valuable insights. There is a fluctuation pattern in the AQI every year. For CO, the AQI seems to increase during the summer months and the new year but is lower during the other months. However, the overall range of AQIs gets much smaller as we move from 2000 to 2016, with an overall downward trend. This shows us that CO AQI values on average have improved from 2000 to 2016. This is consistent with the state AQI analysis from the Choropleth plots. The scatter plots for the other three major pollutants show a similar trend except O3, where the AQI has fluctuated but on average has remained the same from 2000 to 2016. 
                 '''),
                 ], style={'marginLeft': 150, 'marginRight': 150, 'textAlign': 'left'},
             ),
@@ -173,6 +173,13 @@ app.layout = html.Div([
         html.Hr(),
         html.Div([                           
             dcc.Markdown('''### Region Parallel Coordinate Plots''', id = 'parallel'),
+            html.Div([dcc.Markdown('''
+                    We also developed parallel coordinate plots to display our data. These plots are great for displaying multiple variables. Since there are many states to present, it is not pleasant to view one plot with all the states where it is indistinguishable to see what line corresponds to what state. So, we broke the United States into its 7 main regions and presented a plot for each region.  
+                      
+                    The parallel coordinate plots show the average AQI from 2000 to 2016 for each state for each pollutant. These series of plots give great insight into what states on average have the worst air quality for a certain pollutant. As an example, on average, over the course of 16 years, Michigan has had the worst NO2 air quality in the Midwest region. Missouri is the worst for O3, SO2, as well as CO in the Midwest. It is possible to gain more insight into the worst states on a national level by comparing the worst states in each of the 7 regions. 
+                '''),
+                ], style={'marginBottom': 50, 'textAlign': 'left'},
+            ),
             html.Img(src='assets/parallel1.png', alt='Parallel Coordinates Plot'),
             html.Div([dcc.Markdown('''
                     #### New England
@@ -224,71 +231,73 @@ app.layout = html.Div([
             ),
         ], style={'marginTop': 50, 'marginBottom': 50, 'textAlign': 'center'}),
         html.Hr(),
-        html.Div([                             
-            dcc.Markdown('''### Jointplots with Histogram''', id = 'jointhist'),
+        html.Div([      
+            dcc.Markdown('''### Jointplots with Histogram''', id = 'jointhist'),                       
+            html.Div([dcc.Markdown('''
+                    These jointplots show the relationship between concentration and AQI. It also shows the histogram distributions of each variable. From the plot, we can see that the two variables are positively correlated. This is the case for every jointplot comparing the concentration to the air quality index. This also makes sense since as the concentration of a pollutant in the air increases, the air quality gets worse and the index increases. However, this plot still provides insight as we can see just how the variables are related. It is entirely possible to create a regression line and see the exact correlation as well as utilize this to forecast what the AQI will be based on the concentration or the other way around. Just from a quick look, we can see that an increase in O3 concentration of approximately 0.005 ppm results in an AQI increase of between 5-10. The histograms provided also show that the O3 data is spread out similar to a normal distribution. This is not the case with other pollutants, as shown in more detail in our video.
+                '''),
+                ], style={'marginBottom': 50, 'textAlign': 'left'},
+            ),
             html.Img(src='assets/jointplot1.png', alt='Jointplot'),
             html.Div([dcc.Markdown('''
-                    #### Comparison between 
-                    This shows
+                    #### Jointplot comparison between NO2 Concentration and NO2 AQI (with Histogram)
                 '''),
                 ], style={'marginLeft': 150, 'marginRight': 150,'marginBottom': 100, 'textAlign': 'left'},
             ),
     
             html.Img(src='assets/jointplot2.png', alt='Jointplot'),
             html.Div([dcc.Markdown('''
-                    #### Comparison between 
-                    This shows
+                    #### Jointplot comparison between O3 Concentration and O3 AQI (with Histogram)
                 '''),
                 ], style={'marginLeft': 150, 'marginRight': 150,'marginBottom': 100, 'textAlign': 'left'},
             ),
     
             html.Img(src='assets/jointplot3.png', alt='Jointplot'),
             html.Div([dcc.Markdown('''
-                    #### Comparison between 
-                    This shows
+                    #### Jointplot comparison between SO2 Concentration and SO2 AQI (with Histogram)
                 '''),
                 ], style={'marginLeft': 150, 'marginRight': 150,'marginBottom': 100, 'textAlign': 'left'},
             ),
             
             html.Img(src='assets/jointplot4.png', alt='Jointplot'),
             html.Div([dcc.Markdown('''
-                    #### Comparison between 
-                    This shows
+                    #### Jointplot comparison between CO Concentration and CO AQI (with Histogram)
                 '''),
                 ], style={'marginLeft': 150, 'marginRight': 150,'marginBottom': 100, 'textAlign': 'left'},
             ),
         ], style={'marginTop': 50, 'marginBottom': 50, 'textAlign': 'center'}),
         html.Hr(),        
         html.Div([                             
-            dcc.Markdown('''### Jointplots with Kernal Density Estimate''', id = 'jointkde'),
+            dcc.Markdown('''### Jointplots with Kernel Density Estimate''', id = 'jointkde'),
+            html.Div([dcc.Markdown('''
+                    The second type of jointplots we created were jointplots with kernel density estimation (KDE). These jointplots are really useful as they show a joint probability density function for the data. We can see various density levels on the plots and can see how the two variables relate to one another. On the sides, the jointplot also provides kernel density estimation for each variable. We can see the probability model estimate for both the AQI as well as the concentration. They both resemble approximately normal curves. A Gaussian kernel was utilized to create the KDE plots.
+                '''),
+                ], style={'marginBottom': 50, 'textAlign': 'left'},
+            ),
             html.Img(src='assets/jointplot5.png', alt='Jointplot'),
             html.Div([dcc.Markdown('''
-                    #### Comparison between 
-                    This shows
+                    #### Jointplot comparison between NO2 Concentration and NO2 AQI (with KDE)
                 '''),
                 ], style={'marginLeft': 150, 'marginRight': 150,'marginBottom': 100, 'textAlign': 'left'},
             ),
     
             html.Img(src='assets/jointplot6.png', alt='Jointplot'),
             html.Div([dcc.Markdown('''
-                    #### Comparison between 
-                    This shows
+                    #### Jointplot comparison between O3 Concentration and O3 AQI (with KDE)
                 '''),
                 ], style={'marginLeft': 150, 'marginRight': 150,'marginBottom': 100, 'textAlign': 'left'},
             ),
     
             html.Img(src='assets/jointplot7.png', alt='Jointplot'),
             html.Div([dcc.Markdown('''
-                    #### Comparison between 
-                    This shows
+                    #### Jointplot comparison between SO2 Concentration and SO2 AQI (with KDE)
                 '''),
                 ], style={'marginLeft': 150, 'marginRight': 150,'marginBottom': 100, 'textAlign': 'left'},
             ),
             
             html.Img(src='assets/jointplot8.png', alt='Jointplot'),
             html.Div([dcc.Markdown('''
-                    #### Comparison between 
-                    This shows
+                    #### Jointplot comparison between CO Concentration and CO AQI (with KDE)
                 '''),
                 ], style={'marginLeft': 150, 'marginRight': 150,'marginBottom': 100, 'textAlign': 'left'},
             ),
